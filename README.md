@@ -24,7 +24,7 @@ for i in server{a..d}; do rht-vmctl start $i; done
 wait_online workstation
 chmod +x RH236/wp.sh
 for i in RH236/wp.sh /content/courses/rhgs/rhgs3.1/{labtool.shlib,grading-scripts/labtool.rhgs.shlib}; do
-  scp $i root@workstation:/usr/local/sbin
+  scp $i root@workstation:/usr/local/sbin &>/dev/null
 done
 ssh root@workstation 'wp.sh'
 echo completed.
