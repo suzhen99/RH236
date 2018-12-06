@@ -1,6 +1,7 @@
 #!/bin/bash
 
 #workstation prepare
+
 source /usr/local/sbin/labtool.shlib
 source /usr/local/sbin/labtool.rhgs.shlib
 
