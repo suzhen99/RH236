@@ -141,7 +141,7 @@ n
 
 
 
-+10G
++15G
 n
 
 
@@ -177,10 +177,15 @@ n
 w
 eoot
 partprobe /dev/vda
-if hostname | grep -q server[ab]; then
+if hostname | grep -q servera; then
   systemctl enable iscsid
   iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover
-  iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w --portal workstation --login
+  iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w1 --portal workstation --login
+fi
+if hostname | grep -q serverb; then
+  systemctl enable iscsid
+  iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover
+  iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w2 --portal workstation --login
 fi
 EOT
   chmod +x /usr/local/sbin/server_disk.sh
