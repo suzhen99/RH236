@@ -113,6 +113,7 @@ function ovirt_command {
   fi  
 }
 function wp_nagios {
+  wait_tcp_port manager
   host_reachable manager
   pad " · Uploading rhel6.7 repo"
   setup_command manager "curl http://materials.example.com/rhgs-rhel6.repo -o /etc/yum.repos.d/rhgs-rhel6.repo" 
