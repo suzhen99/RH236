@@ -149,20 +149,21 @@ n
 
 w
 EDT
-  partprobe /dev/vda
+  partprobe /dev/vda >/dev/null
   yum -y install target* &>/dev/null
-  targetcli /backstores/block create ba /dev/vda2
-  targetcli /iscsi create iqn.1994-05.com.redhat:wa
-  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/luns create /backstores/block/ba
-  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
-  targetcli /backstores/block create bb /dev/vda3
-  targetcli /iscsi create iqn.1994-05.com.redhat:wb
-  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/luns create /backstores/block/bb
-  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
-  systemctl restart target
-  systemctl enable target
-  firewall-cmd --zone=trusted --permanent --add-port=3260/tcp
-  firewall-cmd --reload
+  targetcli /backstores/block create ba /dev/vda2 >/dev/null
+  targetcli /iscsi create iqn.1994-05.com.redhat:wa >/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/luns create /backstores/block/ba >/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e >/dev/null
+  targetcli /backstores/block create bb /dev/vda3 >/dev/null
+  targetcli /iscsi create iqn.1994-05.com.redhat:wb >/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/luns create /backstores/block/bb >/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e >/dev/null
+  systemctl restart target >/dev/null
+  systemctl enable target >/dev/null
+  firewall-cmd --zone=trusted --permanent --add-port=3260/tcp >/dev/null
+  firewall-cmd --reload >/dev/null
+  setup_command workstation "targetcli ls | grep -q iqn.1994-05.com.redhat:c6a52446f42e"
 }
 
 function server_disk {
@@ -195,5 +196,5 @@ EOT
 
 wp_io
 wp_target
-wp_nagios
 server_disk
+wp_nagios
