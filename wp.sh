@@ -113,7 +113,7 @@ function ovirt_command {
   fi  
 }
 function wp_nagios {
-  wait_tcp_port manager
+  wait_online manager
   pad " · Uploading rhel6.7 repo"
   setup_command manager "curl http://materials.example.com/rhgs-rhel6.repo -o /etc/yum.repos.d/rhgs-rhel6.repo" 
   pad " · Uploading RHSC configuration file"
@@ -135,7 +135,6 @@ function wp_nagios {
 }
 
 function wp_target {
-  pad " · Configuring target"
   fdisk /dev/vda <<EDT >/dev/null
 n
 
@@ -151,18 +150,19 @@ w
 EDT
   partprobe /dev/vda >/dev/null
   yum -y install target* &>/dev/null
-  targetcli /backstores/block create ba /dev/vda2 >/dev/null
-  targetcli /iscsi create iqn.1994-05.com.redhat:wa >/dev/null
-  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/luns create /backstores/block/ba >/dev/null
-  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e >/dev/null
-  targetcli /backstores/block create bb /dev/vda3 >/dev/null
-  targetcli /iscsi create iqn.1994-05.com.redhat:wb >/dev/null
-  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/luns create /backstores/block/bb >/dev/null
-  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e >/dev/null
-  systemctl restart target >/dev/null
-  systemctl enable target >/dev/null
-  firewall-cmd --zone=trusted --permanent --add-port=3260/tcp >/dev/null
-  firewall-cmd --reload >/dev/null
+  targetcli /backstores/block create ba /dev/vda2 &>/dev/null
+  targetcli /iscsi create iqn.1994-05.com.redhat:wa &>/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/luns create /backstores/block/ba &>/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e &>/dev/null
+  targetcli /backstores/block create bb /dev/vda3 &>/dev/null
+  targetcli /iscsi create iqn.1994-05.com.redhat:wb &>/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/luns create /backstores/block/bb &>/dev/null
+  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e &>/dev/null
+  systemctl restart target &>/dev/null
+  systemctl enable target &>/dev/null
+  firewall-cmd --zone=trusted --permanent --add-port=3260/tcp &>/dev/null
+  firewall-cmd --reload >&/dev/null
+  pad " · Configuring target"
   setup_command workstation "targetcli ls | grep -q iqn.1994-05.com.redhat:c6a52446f42e"
 }
 
@@ -179,16 +179,16 @@ w
 eoot
 partprobe /dev/vda
 for i in {a..b}; do
-  if hostname | grep -q server$i; then
+  if hostname | grep -q server\$i; then
     systemctl enable iscsid
-    iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover >/dev/null
-    iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w$i --portal workstation --login >/dev/null
+    iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover &>/dev/null
+    iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w$i --portal workstation --login &>/dev/null
   fi
 done
 EOT
   chmod +x /usr/local/sbin/server_disk.sh
   for i in server{a..e}; do
-    wait_tcp_port $i
+    wait_online $i
     scp /usr/local/sbin/server_disk.sh root@$i:/usr/local/sbin
     ssh root@$i 'server_disk.sh'
   done
