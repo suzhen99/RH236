@@ -1,7 +1,7 @@
 ## EX236
 
 if [ -d RH236 ]; then  
-  rm -rf RH236  
+&nbsp;rm -rf RH236  
 fi  
 git clone https://github.com/suzhen99/RH236.git  
 source /content/courses/rhgs/rhgs3.1/labtool.shlib  
