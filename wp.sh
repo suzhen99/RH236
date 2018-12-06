@@ -61,12 +61,14 @@ function wp_io {
   setfacl -R -m g:pkica:rw ${CADIR}
   setfacl -m d:g:pkica:rw ${CADIR}
   
-  pad ' · Enabling FTP for access to certs'
+  pad " · Enabling FTP for access to certs"
   yum -y install vsftpd &> /dev/null
   systemctl enable vsftpd &> /dev/null
   systemctl start vsftpd &> /dev/null
   firewall-cmd --permanent --zone=trusted --add-service=ftp &> /dev/null
   firewall-cmd --zone=trusted --add-service=ftp &> /dev/null
+  setup_command workstation "yum list vsftpd"
+  
   cp /etc/pki/tls/certs/example-ca.crt /etc/pki/tls/certs/glusterfs.ca
   cp /etc/pki/tls/certs/glusterfs.ca /etc/ssl/glusterfs.ca
 
@@ -125,12 +127,6 @@ function wp_nagios {
   ovirt_command manager " cat <(echo "Ok") | rhsc-setup --config-append=rhsc-install.conf"
   pad " · Configuring .ovirtshellrc for passwordless connect"
   setup_command manager "curl http://materials.example.com/.ovirtshellrc -o /root/.ovirtshellrc"
-  pad ' · Creating gluster-cluster'
-  ovirt_command manager "rhsc-shell -c -l  connect --url 'https://172.25.250.8/api' --user admin@internal  --insecure -E 'add cluster --name gluster-cluster --datacenter-name Default --gluster_service True --virt_service False --version-major 3 --version-minor 5'"
-  pad ' · Adding host servera'
-  ovirt_command  manager "rhsc-shell -c -l  connect --url 'https://172.25.250.8/api' --user admin@internal  --insecure -E  'add host --name servera --address servera.lab.example.com --root_password redhat --cluster-name gluster-cluster'"
-  pad ' · Adding host serverb'
-  ovirt_command  manager "rhsc-shell -c -l  connect --url 'https://172.25.250.8/api' --user admin@internal  --insecure -E  'add host --name serverb --address serverb.lab.example.com --root_password redhat --cluster-name gluster-cluster'"
   pad " · removing old version of sendmail"
   setup_command manager "yum -y remove sendmail"
   pad " · Installing sendmail and sendmail.cf"
@@ -138,9 +134,10 @@ function wp_nagios {
 }
 
 function wp_target {
+  pad " · Configuring target"
   dd if=/dev/zero of=/file1.sda bs=6M count=100
   dd if=/dev/zero of=/file2.sda bs=6M count=100
-  yum -y install target*
+  yum -y install target* &>/dev/null
   targetcli /backstores/fileio create b1 /file1.sda
   targetcli /iscsi create iqn.1994-05.com.redhat:w1
   targetcli /iscsi/iqn.1994-05.com.redhat:w1/tpg1/luns create /backstores/fileio/b1
@@ -156,7 +153,7 @@ function wp_target {
 }
 
 function server_disk {
-  cat >> /usr/local/sbin/server_disk.sh <<EOT
+  cat > /usr/local/sbin/server_disk.sh <<EOT
 #!/bin/bash
 fdisk /dev/vda <<eoot
 n
