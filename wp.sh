@@ -190,6 +190,7 @@ EOT
   for i in server{a..e}; do
     wait_online $i
     scp /usr/local/sbin/server_disk.sh root@$i:/usr/local/sbin
+    ls -l /usr/local/sbin
     ssh root@$i 'server_disk.sh'
   done
 }
