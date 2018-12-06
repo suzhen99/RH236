@@ -136,7 +136,7 @@ function wp_nagios {
 
 function wp_target {
   pad " · Configuring target"
-  fdisk /dev/vda <<EDT
+  fdisk /dev/vda <<EDT >/dev/null
 n
 
 
@@ -151,14 +151,14 @@ w
 EDT
   partprobe /dev/vda
   yum -y install target* &>/dev/null
-  targetcli /backstores/block create b1 /dev/vda2
-  targetcli /iscsi create iqn.1994-05.com.redhat:w1
-  targetcli /iscsi/iqn.1994-05.com.redhat:w1/tpg1/luns create /backstores/block/b1
-  targetcli /iscsi/iqn.1994-05.com.redhat:w1/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
-  targetcli /backstores/block create b2 /dev/vda3
-  targetcli /iscsi create iqn.1994-05.com.redhat:w2
-  targetcli /iscsi/iqn.1994-05.com.redhat:w2/tpg1/luns create /backstores/block/b2
-  targetcli /iscsi/iqn.1994-05.com.redhat:w2/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
+  targetcli /backstores/block create ba /dev/vda2
+  targetcli /iscsi create iqn.1994-05.com.redhat:wa
+  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/luns create /backstores/block/ba
+  targetcli /iscsi/iqn.1994-05.com.redhat:wa/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
+  targetcli /backstores/block create bb /dev/vda3
+  targetcli /iscsi create iqn.1994-05.com.redhat:wb
+  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/luns create /backstores/block/bb
+  targetcli /iscsi/iqn.1994-05.com.redhat:wb/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
   systemctl restart target
   systemctl enable target
   firewall-cmd --zone=trusted --permanent --add-port=3260/tcp
@@ -168,7 +168,7 @@ EDT
 function server_disk {
   cat > /usr/local/sbin/server_disk.sh <<EOT
 #!/bin/bash
-fdisk /dev/vda <<eoot
+fdisk /dev/vda <<eoot >/dev/null
 n
 
 
@@ -177,16 +177,13 @@ n
 w
 eoot
 partprobe /dev/vda
-if hostname | grep -q servera; then
-  systemctl enable iscsid
-  iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover
-  iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w1 --portal workstation --login
-fi
-if hostname | grep -q serverb; then
-  systemctl enable iscsid
-  iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover
-  iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w2 --portal workstation --login
-fi
+for i in {a..b}; do
+  if hostname | grep -q server$i; then
+    systemctl enable iscsid
+    iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover >/dev/null
+    iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w$i --portal workstation --login >/dev/null
+  fi
+done
 EOT
   chmod +x /usr/local/sbin/server_disk.sh
   for i in server{a..e}; do
