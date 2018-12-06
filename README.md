@@ -10,9 +10,9 @@ if [ -d RH236 ]; then rm -rf RH236; fi
 git clone https://github.com/suzhen99/RH236.git
 for i in server{a..e} workstation; do
   qemu-img resize /content/rhgs3.1/x86_64/vms/rh236-$i-vda.qcow2 40G >/dev/null
-    if grep -q rh236-$i-vdb.qcow2 /content/rhgs3.1/x86_64/vms/rh236-$i.xml; then
-      cp /content/rhgs3.1/x86_64/vms/rh236-$i.xml /content/rhgs3.1/x86_64/vms/rh236-$i.xml_origin
-      if hostname | grep -q servera; then
+  if grep -q rh236-$i-vdb.qcow2 /content/rhgs3.1/x86_64/vms/rh236-$i.xml; then
+    cp /content/rhgs3.1/x86_64/vms/rh236-$i.xml /content/rhgs3.1/x86_64/vms/rh236-$i.xml_origin
+    if hostname | grep -q servera; then
       sed -i '45,49d' /content/rhgs3.1/x86_64/vms/rh236-$i.xml
     else
       sed -i '44,48d' /content/rhgs3.1/x86_64/vms/rh236-$i.xml
