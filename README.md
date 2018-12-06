@@ -3,6 +3,7 @@
 ``` bash
 source /content/courses/rhgs/rhgs3.1/labtool.shlib
 source /content/courses/rhgs/rhgs3.1/grading-scripts/labtool.rhgs.shlib
+run_as_root='true'
 echo y | rht-vmctl fullreset classroom
 wait_online classroom
 if [ -d RH236 ]; then rm -rf RH236; fi
