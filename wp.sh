@@ -189,7 +189,7 @@ EOT
   chmod +x /usr/local/sbin/server_disk.sh
   for i in server{a..e}; do
     wait_online $i
-    scp /usr/local/sbin/server_disk.sh root@$i:/usr/local/sbin
+    scp /usr/local/sbin/server_disk.sh root@$i:/usr/local/sbin &>/dev/null
     ls -l /usr/local/sbin
     ssh root@$i 'server_disk.sh'
   done
