@@ -1,7 +1,7 @@
 # EX236
 ## [root@foundation0]#
 ``` bash
-if \[ -d RH236 ]; then  
+if [ -d RH236 ]; then  
   rm -rf RH236  
 fi  
 git clone https://github.com/suzhen99/RH236.git  
