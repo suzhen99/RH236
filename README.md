@@ -1,6 +1,6 @@
 # EX236
 ## [root@foundation0]#
-```
+``` bash
 if \[ -d RH236 ]; then  
   rm -rf RH236  
 fi  
