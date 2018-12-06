@@ -27,4 +27,5 @@ for i in RH236/wp.sh /content/courses/rhgs/rhgs3.1/{labtool.shlib,grading-script
   scp $i root@workstation:/usr/local/sbin  
 done  
 ssh root@workstation 'wp.sh'  
+
 ```
