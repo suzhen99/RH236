@@ -1,11 +1,11 @@
 # RHGS3.1-1.r41468.1-2016-06-17
 ## [root@foundation0]#
 ``` bash
+source /content/courses/rhgs/rhgs3.1/labtool.shlib
 echo y | rht-vmctl fullreset classroom
-wait_tcp_port classroom
+wait_online classroom
 if [ -d RH236 ]; then rm -rf RH236; fi
 git clone https://github.com/suzhen99/RH236.git
-source /content/courses/rhgs/rhgs3.1/labtool.shlib
 for i in server{a..e} workstation; do
   qemu-img resize /content/rhgs3.1/x86_64/vms/rh236-$i-vda.qcow2 40G >/dev/null
     if grep -q rh236-$i-vdb.qcow2 /content/rhgs3.1/x86_64/vms/rh236-$i.xml; then
@@ -19,7 +19,7 @@ for i in server{a..e} workstation; do
 done
 echo y | rht-vmctl fullreset all
 for i in server{a..d}; do rht-vmctl start $i; done
-wait_tcp_port workstation
+wait_online workstation
 chmod +x RH236/wp.sh
 for i in RH236/wp.sh /content/courses/rhgs/rhgs3.1/{labtool.shlib,grading-scripts/labtool.rhgs.shlib}; do
   scp $i root@workstation:/usr/local/sbin
