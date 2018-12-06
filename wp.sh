@@ -136,16 +136,28 @@ function wp_nagios {
 
 function wp_target {
   pad " · Configuring target"
-  dd if=/dev/zero of=/file1.sda bs=6M count=100
-  dd if=/dev/zero of=/file2.sda bs=6M count=100
+  fdisk /dev/vda <<EDT
+n
+
+
+
++10G
+n
+
+
+
+
+w
+EDT
+  partprobe /dev/vda
   yum -y install target* &>/dev/null
-  targetcli /backstores/fileio create b1 /file1.sda
+  targetcli /backstores/block create b1 /dev/vda2
   targetcli /iscsi create iqn.1994-05.com.redhat:w1
-  targetcli /iscsi/iqn.1994-05.com.redhat:w1/tpg1/luns create /backstores/fileio/b1
+  targetcli /iscsi/iqn.1994-05.com.redhat:w1/tpg1/luns create /backstores/block/b1
   targetcli /iscsi/iqn.1994-05.com.redhat:w1/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
-  targetcli /backstores/fileio create b2 /file2.sda
+  targetcli /backstores/block create b2 /dev/vda3
   targetcli /iscsi create iqn.1994-05.com.redhat:w2
-  targetcli /iscsi/iqn.1994-05.com.redhat:w2/tpg1/luns create /backstores/fileio/b2
+  targetcli /iscsi/iqn.1994-05.com.redhat:w2/tpg1/luns create /backstores/block/b2
   targetcli /iscsi/iqn.1994-05.com.redhat:w2/tpg1/acls create iqn.1994-05.com.redhat:c6a52446f42e
   systemctl restart target
   systemctl enable target
