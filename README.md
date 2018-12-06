@@ -1,11 +1,11 @@
 # RHGS3.1-1.r41468.1-2016-06-17
 ## [root@foundation0]#
 ``` bash
+echo y | rht-vmctl fullreset classroom
+wait_tcp_port classroom
 if [ -d RH236 ]; then rm -rf RH236; fi
 git clone https://github.com/suzhen99/RH236.git
 source /content/courses/rhgs/rhgs3.1/labtool.shlib
-echo y | rht-vmctl fullreset classroom
-wait_tcp_port classroom
 for i in server{a..e} workstation; do
   qemu-img resize /content/rhgs3.1/x86_64/vms/rh236-$i-vda.qcow2 40G >/dev/null
     if grep -q rh236-$i-vdb.qcow2 /content/rhgs3.1/x86_64/vms/rh236-$i.xml; then
