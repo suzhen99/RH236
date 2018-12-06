@@ -1,3 +1,4 @@
+``` bash
 #!/bin/bash
 
 #workstation prepare
@@ -182,3 +183,4 @@ wp_io
 wp_nagios
 wp_target
 server_disk
+```
