@@ -1,6 +1,6 @@
 # EX236
 ## [root@foundation0]#
-｀｀｀  
+```
 if \[ -d RH236 ]; then  
 &nbsp;&nbsp;rm -rf RH236  
 fi  
@@ -27,4 +27,4 @@ for i in RH236/wp.sh /content/courses/rhgs/rhgs3.1/{labtool.shlib,grading-script
 &ensp;&ensp;scp $i root@workstation:/usr/local/sbin  
 done  
 ssh root@workstation 'wp.sh'  
-｀｀｀
+```
