@@ -1,6 +1,6 @@
 # EX236
-
-if \[ -d RH236 ]; then  
+## [root@foundation0]#
+> if \[ -d RH236 ]; then  
 &nbsp;&nbsp;rm -rf RH236  
 fi  
 git clone https://github.com/suzhen99/RH236.git  
