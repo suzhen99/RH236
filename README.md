@@ -1,4 +1,4 @@
-## EX36
+## EX236
 
 if [ -d RH236 ]; then
   rm -rf RH236
