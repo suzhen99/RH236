@@ -66,7 +66,7 @@ function wp_io {
   yum -y install vsftpd &> /dev/null
   systemctl enable vsftpd &> /dev/null
   systemctl start vsftpd &> /dev/null
-  firewall-cmd --permanent --zone=trusted --add-service=ftp &> /dev/null
+  firewall-cmd --permanent --zone=trusted --add-service=ftp &>/dev/null
   firewall-cmd --zone=trusted --add-service=ftp &> /dev/null
   setup_command workstation "yum list vsftpd"
   
@@ -177,12 +177,12 @@ n
 +1G
 w
 eoot
-partprobe /dev/vda
+partprobe /dev/vda &>/dev/null
 for i in {a..b}; do
   if hostname | grep -q server\$i; then
-    systemctl enable iscsid
+    systemctl enable iscsid &>/dev/null
     iscsiadm --mode discoverydb --type sendtargets --portal workstation --discover &>/dev/null
-    iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w$i --portal workstation --login &>/dev/null
+    iscsiadm --mode node --targetname iqn.1994-05.com.redhat:w\$i --portal workstation --login &>/dev/null
   fi
 done
 EOT
