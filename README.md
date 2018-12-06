@@ -1,4 +1,4 @@
-# EX236
+# RHGS3.1-1.r41468.1-2016-06-17
 ## [root@foundation0]#
 ``` bash
 if [ -d RH236 ]; then  
