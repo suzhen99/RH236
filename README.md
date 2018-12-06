@@ -1,7 +1,7 @@
 # RHGS3.1-1.r41468.1-2016-06-17
 ## [root@foundation0]#
 ``` bash
-source /content/courses/rhgs/rhgs3.1/labtool.shlib
+source /content/courses/rhgs/rhgs3.1/grading-scripts/labtool.rhgs.shlib
 echo y | rht-vmctl fullreset classroom
 wait_online classroom
 if [ -d RH236 ]; then rm -rf RH236; fi
