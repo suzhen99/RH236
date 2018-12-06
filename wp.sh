@@ -114,7 +114,6 @@ function ovirt_command {
 }
 function wp_nagios {
   wait_tcp_port manager
-  host_reachable manager
   pad " · Uploading rhel6.7 repo"
   setup_command manager "curl http://materials.example.com/rhgs-rhel6.repo -o /etc/yum.repos.d/rhgs-rhel6.repo" 
   pad " · Uploading RHSC configuration file"
@@ -195,6 +194,6 @@ EOT
 }
 
 wp_io
-wp_nagios
 wp_target
+wp_nagios
 server_disk
